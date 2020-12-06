@@ -1,18 +1,23 @@
 package ru.trinitydigital.jsonfile.ui.main
 
+import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.trinitydigital.jsonfile.R
 import ru.trinitydigital.jsonfile.utils.FileUtils
 import java.lang.StringBuilder
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val context: Context) : ViewModel() {
 
     val pdf = MutableLiveData<Uri>()
 
     fun loadData() {
         val data = FileUtils.getWordData()
+    }
+
+    fun loadPdf(): String {
+        return FileUtils.loadPfdFromAsset()[0]
     }
 
     fun replaceWords(message: String): String {
@@ -31,4 +36,7 @@ class MainViewModel : ViewModel() {
 
         return builder.toString()
     }
+
+
+    fun loadWord(): String = context.getString(R.string.app_name1)
 }

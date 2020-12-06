@@ -1,9 +1,14 @@
 package ru.trinitydigital.jsonfile
 
+import android.content.Context
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.runners.MockitoJUnitRunner
 import ru.trinitydigital.jsonfile.ui.main.MainViewModel
 
 /**
@@ -11,6 +16,7 @@ import ru.trinitydigital.jsonfile.ui.main.MainViewModel
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+@RunWith(MockitoJUnitRunner::class)
 class ExampleUnitTest {
 
     private val ONE_WORD_MESSAGE = "ONE_WORD_MESSAGE"
@@ -20,8 +26,10 @@ class ExampleUnitTest {
     private val TEN_WORD_MESSAGE = "WORD_MESSAGE ONE1 ONE2 ONE3 ONE4 ONE5 ONE6 ONE7 ONE8 ONE9"
     private val TEN_WORD_MESSAGERESULT = "ONE9 ONE8 ONE7 ONE6 ONE5 ONE4 ONE3 ONE2 ONE1 WORD_MESSAGE"
 
-    private val TEN_WORD_MESSAGE_WITH_MORE_SPACES = "WORD_MESSAGE     ONE1 ONE2 ONE3 ONE4     ONE5 ONE6 ONE7 \n   ONE8 ONE9"
-    private val TEN_WORD_MESSAGE_WITH_MORE_SPACES_RESULT = "ONE9 ONE8   \n ONE7 ONE6 ONE5     ONE4 ONE3 ONE2 ONE1     WORD_MESSAGE"
+    private val TEN_WORD_MESSAGE_WITH_MORE_SPACES =
+        "WORD_MESSAGE     ONE1 ONE2 ONE3 ONE4     ONE5 ONE6 ONE7 \n   ONE8 ONE9"
+    private val TEN_WORD_MESSAGE_WITH_MORE_SPACES_RESULT =
+        "ONE9 ONE8   \n ONE7 ONE6 ONE5     ONE4 ONE3 ONE2 ONE1     WORD_MESSAGE"
 
 
     private val SPACES_MESSAGE_RESULT = "     "
@@ -30,11 +38,27 @@ class ExampleUnitTest {
     private val SPACES_MESSAGE_RESULT1 = "sasha     "
     private val SPACES_MESSAGE1 = "     sasha"
 
+
+    @Mock
+    private lateinit var context: Context
+
     private lateinit var vm: MainViewModel
+
 
     @Before
     fun before() {
-        vm = MainViewModel()
+        vm = MainViewModel(context)
+    }
+
+    @Test
+    fun loadString() {
+        `when`(context.getString(R.string.app_name1))
+            .thenReturn("JsonFile")
+        val viewModel = MainViewModel(context)
+
+        val result = viewModel.loadWord()
+
+        Assert.assertEquals("JsonFile", result)
     }
 
     @Test
